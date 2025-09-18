@@ -52,7 +52,7 @@
 
   /* Display box */
   #display {
-    width:100%;
+    width:94%;
     height: var(--display-height);
     font-size: var(--display-font-size);
     text-align:right;
@@ -89,7 +89,7 @@
 
 <!-- Calculator -->
 <div id="calculator">
-  <h2>Made by Rohit Biswas</h2>
+  <h2>Made by Rohit Biswas😎</h2>
   <input type="text" id="display" disabled>
   <select id="baseSelect">
     <option value="2">Binary</option>
@@ -122,6 +122,17 @@
     <button class="equal" onclick="calculate()">=</button>
     <button class="operator" onclick="appendValue('+')">+</button>
   </div>
+
+  <!-- Hexadecimal Buttons in One Line -->
+  <div class="row">
+    <button class="num" onclick="appendValue('A')">A</button>
+    <button class="num" onclick="appendValue('B')">B</button>
+    <button class="num" onclick="appendValue('C')">C</button>
+    <button class="num" onclick="appendValue('D')">D</button>
+    <button class="num" onclick="appendValue('E')">E</button>
+    <button class="num" onclick="appendValue('F')">F</button>
+  </div>
+
   <div class="row">
     <button class="clear" onclick="clearDisplay()">C</button>
     <button onclick="deleteLast()">⌫</button>
