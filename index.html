@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Multi-Base Calculator</title>
 <style>
-  /* === CSS Variables for easy customization === */
   :root {
     --body-bg: #1e1e2e;
     --body-color: #ffffff;
@@ -31,7 +30,6 @@
     height:100vh; margin:0; background: var(--body-bg); color: var(--body-color);
   }
 
-  /* Login Box */
   #login-box {
     background: var(--calculator-bg); padding:20px; border-radius:12px;
     text-align:center; box-shadow:0 0 15px rgba(0,0,0,0.6);
@@ -46,11 +44,9 @@
   #login-box button:hover { background:#45a049; }
   #error { color:red; margin-top:10px; }
 
-  /* Calculator */
   #calculator { display:none; background: var(--calculator-bg); padding:20px; border-radius:16px; width:380px; box-shadow:0 0 20px rgba(0,0,0,0.7);}
   h2 { text-align:center; color:#f0f5f3; margin-bottom:10px; }
 
-  /* Display box */
   #display {
     width:94%;
     height: var(--display-height);
@@ -78,7 +74,6 @@
 </head>
 <body>
 
-<!-- Password Login -->
 <div id="login-box">
   <h2>Enter Password</h2>
   <input type="password" id="password" placeholder="Password">
@@ -87,9 +82,8 @@
   <div id="error"></div>
 </div>
 
-<!-- Calculator -->
 <div id="calculator">
-  <h2>Made by Rohit Biswas😎</h2>
+  <h2>Made by Rohit Biswas</h2>
   <input type="text" id="display" disabled>
   <select id="baseSelect">
     <option value="2">Binary</option>
@@ -123,7 +117,6 @@
     <button class="operator" onclick="appendValue('+')">+</button>
   </div>
 
-  <!-- Hexadecimal Buttons in One Line -->
   <div class="row">
     <button class="num" onclick="appendValue('A')">A</button>
     <button class="num" onclick="appendValue('B')">B</button>
@@ -147,73 +140,76 @@
 </div>
 
 <script>
-  // === Password is now changeable via variable ===
-  let correctPassword = "rohit12345";
+let correctPassword = "rohit12345";
 
-  function checkPassword(){
-    const pass = document.getElementById("password").value;
-    if(pass === correctPassword){
-      document.getElementById("login-box").style.display="none";
-      document.getElementById("calculator").style.display="block";
-    } else {
-      document.getElementById("error").innerText="Incorrect password!";
-    }
+function checkPassword(){
+  const pass = document.getElementById("password").value;
+  if(pass === correctPassword){
+    document.getElementById("login-box").style.display="none";
+    document.getElementById("calculator").style.display="block";
+  } else {
+    document.getElementById("error").innerText="Incorrect password!";
   }
+}
 
-  // --- Calculator ---
-  const display = document.getElementById("display");
-  const baseSelect = document.getElementById("baseSelect");
+const display = document.getElementById("display");
+const baseSelect = document.getElementById("baseSelect");
 
-  function appendValue(val){
-    display.value += val;
-  }
+function appendValue(val){
+  display.value += val;
+}
 
-  function clearDisplay(){
-    display.value = "";
-    updateConversions("");
-  }
+function clearDisplay(){
+  display.value = "";
+  updateConversions("");
+}
 
-  function deleteLast(){
-    display.value = display.value.slice(0,-1);
-  }
+function deleteLast(){
+  display.value = display.value.slice(0,-1);
+}
 
-  function calculate(){
-    try{
-      const base = parseInt(baseSelect.value);
-      let val = display.value;
+function calculate(){
+  try{
+    const base = parseInt(baseSelect.value);
+    let val = display.value;
 
-      if(base !== 10){
-        let tokens = val.split(/([+\-*/])/).map(t=>{
-          if(['+','-','*','/'].includes(t)) return t;
-          if(t.includes('.')) return parseFloat(parseInt(t, base));
-          else return parseInt(t, base);
-        });
-        val = tokens.join('');
-      }
-
+    if(base === 10){
+      // Decimal: normal eval, fraction supported
       let result = eval(val);
       display.value = result;
       updateConversions(result);
-    } catch {
-      display.value="Error";
-      updateConversions("");
+    } else {
+      // Binary/Octal/Hex: integer only
+      let tokens = val.split(/([+\-*/])/).map(t=>{
+        if(['+','-','*','/'].includes(t)) return t;
+        return parseInt(t, base); // ignore fraction
+      });
+      val = tokens.join('');
+      let result = eval(val);
+      display.value = result;
+      updateConversions(result);
     }
-  }
 
-  function updateConversions(val){
-    let num = parseFloat(val);
-    if(isNaN(num)){
-      document.getElementById("bin").innerText="";
-      document.getElementById("oct").innerText="";
-      document.getElementById("dec").innerText="";
-      document.getElementById("hex").innerText="";
-      return;
-    }
-    document.getElementById("bin").innerText=Math.floor(num).toString(2);
-    document.getElementById("oct").innerText=Math.floor(num).toString(8);
-    document.getElementById("dec").innerText=num;
-    document.getElementById("hex").innerText=Math.floor(num).toString(16).toUpperCase();
+  } catch {
+    display.value="Error";
+    updateConversions("");
   }
+}
+
+function updateConversions(val){
+  let num = parseFloat(val);
+  if(isNaN(num)){
+    document.getElementById("bin").innerText="";
+    document.getElementById("oct").innerText="";
+    document.getElementById("dec").innerText="";
+    document.getElementById("hex").innerText="";
+    return;
+  }
+  document.getElementById("bin").innerText=Math.floor(num).toString(2);
+  document.getElementById("oct").innerText=Math.floor(num).toString(8);
+  document.getElementById("dec").innerText=num;
+  document.getElementById("hex").innerText=Math.floor(num).toString(16).toUpperCase();
+}
 </script>
 
 </body>
