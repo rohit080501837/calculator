@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="example.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multi-Base Calculator</title>
+<style>
+  :root {
+    --body-bg: #2a2a2a;
+    --body-color: #ffffffff;
+    --calculator-bg: #2a2a40;
+    --display-bg: #000000;
+    --display-color: #ffffff;
+    --display-height: 40px;
+    --display-font-size: 18px;
+    --display-padding: 6px;
+    --button-bg: #3a3a5c;
+    --button-color: #ffffff;
+    --button-hover-bg: #50507a;
+    --operator-bg: #3a3a5c;
+    --equal-bg: #3a3a5c;
+    --clear-bg: #3a3a5c;
+    --converter-bg: #1e1e2e;
+  }
+
+  body {
+    font-family: var(--font-family);
+    display:flex; justify-content:center; align-items:center;
+    height:100vh; margin:0; background: var(--body-bg); color: var(--body-color);
+  }
+
+  #login-box {
+    background: var(--calculator-bg); padding:20px; border-radius:12px; border-style: dashed;
+    text-align:center; box-shadow:0 0 15px rgba(0,0,0,0.6);
+  }
+  #login-box input {
+    padding:13px; font-size:16px; border-radius:20px; border:none; outline:none;
+  }
+  #login-box button {
+    margin-top:10px; padding:10px 20px; font-size:16px;
+    border:none; border-radius:15px; background:#e65f48; color:white; cursor:pointer;
+  }
+  #login-box button:hover { background:#a05f45; }
+  #error { color:red; margin-top:10px; }
+
+  #calculator { display:none; background: var(--calculator-bg); padding:20px; border-radius:16px; width:380px; box-shadow:0 0 20px rgba(0,0,0,0.7);}
+  h2 { text-align:center; color:#f0f5f3; margin-bottom:10px; }
+
+  #display {
+    width:97%;
+    height: var(--display-height);
+    font-size: var(--display-font-size);
+    text-align:right;
+    margin-bottom:10px;
+    border:none;
+    border-radius:10px;
+    padding: var(--display-padding);
+    background: var(--display-bg);
+    color: var(--display-color);
+    
+  }
+
+  select { width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:none; background:#333645; color:#fff; font-size:16px; }
+
+  .row { display:flex; justify-content:space-between; margin:4px 0; }
+  button { flex:1; margin:4px; padding:18px; border:none; border-radius:12px; cursor:pointer; background: var(--button-bg); color: var(--button-color); transition:0.2s; font-size:24px; font-weight:bold;}
+  button:hover { background: var(--button-hover-bg); }
+  .operator { background: var(--operator-bg); }
+  .equal { background: var(--equal-bg); }
+  .clear { background: var(--clear-bg); }
+
+  .conversion { margin-top:10px; padding:10px; background: var(--converter-bg); border-radius:10px; font-size:14px; }
+</style>
+</head>
+<body>
+
+<div id="login-box">
+  <h2>Enter Password</h2>
+  <input type="password" id="password" placeholder="Password">
+  <br>
+  <button onclick="checkPassword()">open</button>
+  <div id="error"></div>
+</div>
+
+<div id="calculator">
+  <h2 id="harry">Made by <a id="link" href="https://www.facebook.com/rohit.biswas.552871">Rohit Biswas😎</a></h2>
+  <input type="text" id="display" disabled>
+  <select id="baseSelect">
+    <option value="2">Binary</option>
+    <option value="8">Octal</option>
+    <option value="10" selected>Decimal</option>
+    <option value="16">Hexadecimal</option>
+  </select>
+
+  <div class="row">
+    <button class="num" onclick="appendValue('7')">7</button>
+    <button class="num" onclick="appendValue('8')">8</button>
+    <button class="num" onclick="appendValue('9')">9</button>
+    <button class="operator" onclick="appendValue('/')">÷</button>
+  </div>
+  <div class="row">
+    <button class="num" onclick="appendValue('4')">4</button>
+    <button class="num" onclick="appendValue('5')">5</button>
+    <button class="num" onclick="appendValue('6')">6</button>
+    <button class="operator" onclick="appendValue('*')">×</button>
+  </div>
+  <div class="row">
+    <button class="num" onclick="appendValue('1')">1</button>
+    <button class="num" onclick="appendValue('2')">2</button>
+    <button class="num" onclick="appendValue('3')">3</button>
+    <button class="operator" onclick="appendValue('-')">−</button>
+  </div>
+  <div class="row">
+    <button class="num" onclick="appendValue('0')">0</button>
+    <button class="num" onclick="appendValue('.')">.</button>
+    <button class="equal" onclick="calculate()">=</button>
+    <button class="operator" onclick="appendValue('+')">+</button>
+  </div>
+
+  <div class="row">
+    <button class="num" onclick="appendValue('A')">A</button>
+    <button class="num" onclick="appendValue('B')">B</button>
+    <button class="num" onclick="appendValue('C')">C</button>
+    <button class="num" onclick="appendValue('D')">D</button>
+    <button class="num" onclick="appendValue('E')">E</button>
+    <button class="num" onclick="appendValue('F')">F</button>
+  </div>
+
+  <div class="row">
+    <button class="clear" onclick="clearDisplay()">C</button>
+    <button onclick="deleteLast()">⌫</button>
+  </div>
+
+  <div class="conversion">
+    <p><b>Binary:</b> <span id="bin"></span></p>
+    <p><b>Octal:</b> <span id="oct"></span></p>
+    <p><b>Decimal:</b> <span id="dec"></span></p>
+    <p><b>Hexadecimal:</b> <span id="hex"></span></p>
+  </div>
+</div>
+
+<script>
+let correctPassword = "";
+
+function checkPassword(){
+  const pass = document.getElementById("password").value;
+  if(pass === correctPassword){
+    document.getElementById("login-box").style.display="none";
+    document.getElementById("calculator").style.display="block";
+  } else {
+    document.getElementById("error").innerText="Incorrect password!";
+  }
+}
+
+const display = document.getElementById("display");
+const baseSelect = document.getElementById("baseSelect");
+
+function appendValue(val){
+  display.value += val;
+}
+
+function clearDisplay(){
+  display.value = "";
+  updateConversions("");
+}
+
+function deleteLast(){
+  display.value = display.value.slice(0,-1);
+}
+
+function calculate(){
+  try{
+    const base = parseInt(baseSelect.value);
+    let val = display.value;
+
+    if(base === 10){
+      // Decimal: normal eval, fraction supported
+      let result = eval(val);
+      display.value = result;
+      updateConversions(result);
+    } else {
+      // Binary/Octal/Hex: integer only
+      let tokens = val.split(/([+\-*/])/).map(t=>{
+        if(['+','-','*','/'].includes(t)) return t;
+        return parseInt(t, base); // ignore fraction
+      });
+      val = tokens.join('');
+      let result = eval(val);
+      display.value = result;
+      updateConversions(result);
+    }
+
+  } catch {
+    display.value="Error";
+    updateConversions("");
+  }
+}
+
+function updateConversions(val){
+  let num = parseFloat(val);
+  if(isNaN(num)){
+    document.getElementById("bin").innerText="";
+    document.getElementById("oct").innerText="";
+    document.getElementById("dec").innerText="";
+    document.getElementById("hex").innerText="";
+    return;
+  }
+  document.getElementById("bin").innerText=Math.floor(num).toString(2);
+  document.getElementById("oct").innerText=Math.floor(num).toString(8);
+  document.getElementById("dec").innerText=num;
+  document.getElementById("hex").innerText=Math.floor(num).toString(16).toUpperCase();
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+*{
+
+  color: #f0c67a;
+   text-decoration: none;
+   tab-size: 4;
+   border-style: none;
+   padding: 0%;
+   font-family: 'Harry P';
+
+}
+.conversion{
+   border-style: dashed;
+   border-width: 2px;
+  
+}
+/* Id=(#) */
+#calculator{
+   border-style: dashed;
+   color:rgb(255, 255, 255);
+   width: 380px;
+   height: 790px;
+   border-width: 2px;
+  
+}
+/* class=(.) */
+.clear{
+border-style: dashed;
+color: #f0c67a;
+border-width: 2px;
+}
+#display{
+   height: 50px;
+
+   text-align: center;
+}
+
+#harry{
+   font-size: 25px;
+}
+@font-face {
+  font-family: 'Harry P';
+  src: url('Myfont.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
